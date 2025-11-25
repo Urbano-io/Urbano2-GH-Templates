@@ -1,0 +1,24 @@
+{
+  "Folder": "C:\\Users\\zhjw_\\Box\\20241230_jingwen\\Template\\map_file",
+  "Granularity": "Block Group",
+  "CoordinateReference": {
+    "Utm": "18T",
+    "BottomLeftUtm": {
+      "Item1": 585339.6478963865,
+      "Item2": 4512940.092765805
+    },
+    "BottomRightUtm": {
+      "Item1": 586369.326777585,
+      "Item2": 4512952.029880568
+    }
+  },
+  "Top": 40.77149963378906,
+  "Bottom": 40.76300048828125,
+  "Left": -73.98889923095703,
+  "Right": -73.97669982910156,
+  "OsmFilePath": "C:\\Users\\zhjw_\\Box\\20241230_jingwen\\Template\\map_file\\40.7715,40.763,-73.9767,-73.9889_Block Group.osm",
+  "BlockFilePath": "C:\\Users\\zhjw_\\Box\\20241230_jingwen\\Template\\map_file\\40.7715,40.763,-73.9767,-73.9889_Block Group.blocks",
+  "ElevationFilePath": "C:\\Users\\zhjw_\\Box\\20241230_jingwen\\Template\\map_file\\40.7715,40.763,-73.9767,-73.9889_Block Group.egrid",
+  "OvertureFilePath": "C:\\Users\\zhjw_\\Box\\20241230_jingwen\\Template\\map_file\\40.7715,40.763,-73.9767,-73.9889_Block Group_overture.parquet",
+  "Layers": []
+}
