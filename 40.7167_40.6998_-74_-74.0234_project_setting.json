@@ -1,0 +1,25 @@
+{
+  "Folder": "C:\\Users\\doubl\\Downloads\\manhattan",
+  "FileNameStr": "40.7167_40.6998_-74_-74.0234",
+  "Granularity": "Block",
+  "CoordinateReference": {
+    "Utm": "18T",
+    "BottomLeftUtm": {
+      "Item1": 582505.6826406379,
+      "Item2": 4505891.429438546
+    },
+    "BottomRightUtm": {
+      "Item1": 584482.6049859334,
+      "Item2": 4505913.668196009
+    }
+  },
+  "Top": 40.7167,
+  "Bottom": 40.6998,
+  "Left": -74.0234,
+  "Right": -74,
+  "OsmFilePath": "C:\\Users\\doubl\\Downloads\\manhattan\\40.7167_40.6998_-74_-74.0234.osm.pbf",
+  "BlockFilePath": "C:\\Users\\doubl\\Downloads\\manhattan\\40.7167_40.6998_-74_-74.0234.blocks",
+  "ElevationFilePath": "C:\\Users\\doubl\\Downloads\\manhattan\\40.7167_40.6998_-74_-74.0234.egrid",
+  "OvertureFilePath": "",
+  "Layers": []
+}
