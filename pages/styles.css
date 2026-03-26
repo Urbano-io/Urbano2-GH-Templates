@@ -1,0 +1,104 @@
+:root {
+  --bg: #f2f4f8;
+  --panel-bg: #ffffff;
+  --text: #1f2937;
+  --muted: #5b6574;
+  --border: #d8dee7;
+  --link: #0a58ca;
+  --link-hover: #073b8a;
+  --folder: #8f5f00;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  background: linear-gradient(180deg, #f8f9fb 0%, #eef2f7 100%);
+  color: var(--text);
+}
+
+.container {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 32px 16px 48px;
+}
+
+.header h1 {
+  margin: 0 0 8px;
+  font-size: 1.8rem;
+}
+
+.subtitle {
+  margin: 0;
+  color: var(--muted);
+}
+
+.panel {
+  margin-top: 20px;
+  background: var(--panel-bg);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 16px;
+  box-shadow: 0 8px 22px rgba(12, 19, 36, 0.06);
+}
+
+.meta {
+  margin-bottom: 14px;
+  color: var(--muted);
+  font-size: 0.95rem;
+}
+
+.tree,
+.tree ul {
+  list-style: none;
+  margin: 0;
+  padding-left: 1rem;
+}
+
+.tree {
+  padding-left: 0;
+}
+
+.item {
+  margin: 4px 0;
+  line-height: 1.5;
+  word-break: break-word;
+}
+
+.folder-name {
+  color: var(--folder);
+  font-weight: 600;
+}
+
+.file-link {
+  color: var(--link);
+  text-decoration: none;
+}
+
+.file-link:hover {
+  color: var(--link-hover);
+  text-decoration: underline;
+}
+
+.file-actions {
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+
+.action-link {
+  color: var(--link);
+  text-decoration: none;
+}
+
+.action-link:hover {
+  color: var(--link-hover);
+  text-decoration: underline;
+}
+
+.error {
+  color: #9c1b1b;
+  font-weight: 600;
+}

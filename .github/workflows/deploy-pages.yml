@@ -1,0 +1,63 @@
+name: Deploy Grasshopper Template files
+
+on:
+  push:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  build:
+    if: github.ref_name == github.event.repository.default_branch
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Build .gh file manifest
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          mkdir -p pages
+
+          find . -type f -name '*.gh' -not -path './.git/*' \
+            | sed 's|^./||' \
+            | LC_ALL=C sort \
+            | jq -R -s 'split("\\n")[:-1]' > pages/gh-files.json
+
+          jq -n \
+            --arg owner "${GITHUB_REPOSITORY_OWNER}" \
+            --arg repo "${GITHUB_REPOSITORY#*/}" \
+            --arg branch "${GITHUB_REF_NAME}" \
+            --arg generatedAt "$(date -u +"%Y-%m-%dT%H:%M:%SZ")" \
+            '{owner:$owner, repo:$repo, branch:$branch, generatedAt:$generatedAt}' > pages/site-config.json
+
+          touch pages/.nojekyll
+
+      - name: Setup Pages
+        uses: actions/configure-pages@v5
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: pages
+
+  deploy:
+    if: github.ref_name == github.event.repository.default_branch
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - name: Deploy
+        id: deployment
+        uses: actions/deploy-pages@v4
