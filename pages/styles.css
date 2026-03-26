@@ -347,8 +347,8 @@ button:focus-visible,
   text-decoration: none;
   border: 1px solid var(--color-accent);
   border-radius: var(--radius-sm);
-  width: 1.9rem;
-  height: 1.9rem;
+  width: 1.65rem;
+  height: 1.65rem;
   background: rgba(59, 130, 246, 0.06);
 }
 
@@ -359,8 +359,8 @@ button:focus-visible,
 }
 
 .action-icon {
-  width: 1rem;
-  height: 1rem;
+  width: 0.9rem;
+  height: 0.9rem;
   display: block;
 }
 

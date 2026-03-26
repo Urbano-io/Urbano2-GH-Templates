@@ -59,7 +59,7 @@ function createDownloadIcon() {
   const path = document.createElementNS(svgNs, "path");
   path.setAttribute(
     "d",
-    "M5 20h14v-2H5v2zm7-18L5.33 8.67l1.41 1.41L11 5.83V16h2V5.83l4.26 4.25 1.41-1.41L12 2z"
+    "M5 20h14v-2H5v2zm7-18v12.17l4.24-4.24 1.41 1.41L12 18l-5.66-5.66 1.41-1.41L11 14.17V2h1z"
   );
   path.setAttribute("fill", "currentColor");
 
