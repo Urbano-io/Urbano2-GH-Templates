@@ -101,12 +101,108 @@ function formatDate(value) {
   return `${datePart}, ${timePart}`;
 }
 
+function updateBranchQueryParam(branch) {
+  const url = new URL(window.location.href);
+  url.searchParams.set("branch", branch);
+  window.history.replaceState({}, "", url);
+}
+
+function getInitialBranch(defaultBranch) {
+  const url = new URL(window.location.href);
+  return url.searchParams.get("branch") || defaultBranch;
+}
+
+function githubApiUrl(path) {
+  return `https://api.github.com${path}`;
+}
+
 async function loadJson(path) {
   const response = await fetch(path, { cache: "no-store" });
   if (!response.ok) {
     throw new Error(`Failed to load ${path} (${response.status})`);
   }
   return response.json();
+}
+
+async function loadBranches(config) {
+  const response = await fetch(
+    githubApiUrl(`/repos/${config.owner}/${config.repo}/branches?per_page=100`),
+    { cache: "no-store" }
+  );
+  if (!response.ok) {
+    throw new Error(`Failed to load branches (${response.status})`);
+  }
+
+  const branches = await response.json();
+  return branches.map((branch) => branch.name).sort(byName);
+}
+
+async function loadBranchTree(config, branch) {
+  const branchResponse = await fetch(
+    githubApiUrl(`/repos/${config.owner}/${config.repo}/branches/${encodeURIComponent(branch)}`),
+    { cache: "no-store" }
+  );
+  if (!branchResponse.ok) {
+    throw new Error(`Failed to load branch ${branch} (${branchResponse.status})`);
+  }
+  const branchInfo = await branchResponse.json();
+
+  const [treeResponse, commitResponse] = await Promise.all([
+    fetch(
+      githubApiUrl(`/repos/${config.owner}/${config.repo}/git/trees/${branchInfo.commit.sha}?recursive=1`),
+      { cache: "no-store" }
+    ),
+    fetch(
+      githubApiUrl(`/repos/${config.owner}/${config.repo}/commits/${branchInfo.commit.sha}`),
+      { cache: "no-store" }
+    ),
+  ]);
+
+  if (!treeResponse.ok) {
+    throw new Error(`Failed to load branch tree (${treeResponse.status})`);
+  }
+  if (!commitResponse.ok) {
+    throw new Error(`Failed to load branch commit (${commitResponse.status})`);
+  }
+
+  const treeInfo = await treeResponse.json();
+  const commitInfo = await commitResponse.json();
+  const files = treeInfo.tree
+    .filter((entry) => entry.type === "blob" && entry.path.toLowerCase().endsWith(".gh"))
+    .map((entry) => entry.path)
+    .sort(byName);
+
+  return {
+    files,
+    generatedAt: commitInfo.commit?.committer?.date || commitInfo.commit?.author?.date || "",
+  };
+}
+
+function populateBranchSelect(selectEl, branches, selectedBranch) {
+  selectEl.innerHTML = "";
+
+  for (const branch of branches) {
+    const option = document.createElement("option");
+    option.value = branch;
+    option.textContent = branch;
+    option.selected = branch === selectedBranch;
+    selectEl.appendChild(option);
+  }
+}
+
+function renderFileTree(rootEl, files, config) {
+  rootEl.innerHTML = "";
+
+  if (files.length === 0) {
+    rootEl.textContent = "No .gh files were found in this repository.";
+    return;
+  }
+
+  const tree = buildTree(files);
+  const list = document.createElement("ul");
+  list.className = "tree";
+  renderNode(tree, list, config);
+  rootEl.appendChild(list);
 }
 
 async function init() {
@@ -117,30 +213,59 @@ async function init() {
   const statsEl = document.getElementById("repo-stats");
   const branchEl = document.getElementById("branch-name");
   const generatedEl = document.getElementById("generated-at");
+  const branchSelectEl = document.getElementById("branch-select");
 
   try {
-    const [files, config] = await Promise.all([
-      loadJson("gh-files.json"),
-      loadJson("site-config.json"),
-    ]);
+    const config = await loadJson("site-config.json");
+    const branches = await loadBranches(config);
+    const initialBranch = branches.includes(getInitialBranch(config.branch))
+      ? getInitialBranch(config.branch)
+      : config.branch;
 
-    const generated = formatDate(config.generatedAt);
-    metaEl.textContent = `${files.length} .gh file(s) found | Branch: ${config.branch} | Generated: ${generated}`;
-
-    if (statsEl) statsEl.textContent = `${files.length} .gh file(s)`;
-    if (branchEl) branchEl.textContent = config.branch || "-";
-    if (generatedEl) generatedEl.textContent = generated;
-
-    if (files.length === 0) {
-      rootEl.textContent = "No .gh files were found in this repository.";
-      return;
+    if (branchSelectEl) {
+      populateBranchSelect(branchSelectEl, branches, initialBranch);
     }
 
-    const tree = buildTree(files);
-    const list = document.createElement("ul");
-    list.className = "tree";
-    renderNode(tree, list, config);
-    rootEl.appendChild(list);
+    async function refreshBranch(branch) {
+      metaEl.textContent = `Loading branch ${branch}...`;
+      rootEl.innerHTML = "";
+      if (statsEl) statsEl.textContent = "Loading...";
+      if (branchEl) branchEl.textContent = branch;
+      if (generatedEl) generatedEl.textContent = "Loading...";
+
+      const branchData = await loadBranchTree(config, branch);
+      const generated = formatDate(branchData.generatedAt);
+      const branchConfig = { ...config, branch };
+
+      metaEl.textContent = `${branchData.files.length} .gh file(s) found | Branch: ${branch} | Generated: ${generated}`;
+      if (statsEl) statsEl.textContent = `${branchData.files.length} .gh file(s)`;
+      if (branchEl) branchEl.textContent = branch;
+      if (generatedEl) generatedEl.textContent = generated;
+
+      updateBranchQueryParam(branch);
+      renderFileTree(rootEl, branchData.files, branchConfig);
+    }
+
+    if (branchSelectEl) {
+      branchSelectEl.addEventListener("change", async (event) => {
+        const branch = event.target.value;
+        try {
+          await refreshBranch(branch);
+        } catch (error) {
+          metaEl.textContent = "Could not load file index.";
+          if (statsEl) statsEl.textContent = "Unavailable";
+          if (branchEl) branchEl.textContent = branch;
+          if (generatedEl) generatedEl.textContent = "Unavailable";
+          rootEl.innerHTML = "";
+          const err = document.createElement("p");
+          err.className = "error";
+          err.textContent = error.message;
+          rootEl.appendChild(err);
+        }
+      });
+    }
+
+    await refreshBranch(initialBranch);
   } catch (error) {
     metaEl.textContent = "Could not load file index.";
     if (statsEl) statsEl.textContent = "Unavailable";

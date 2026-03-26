@@ -41,7 +41,11 @@
         <div class="sidebar-section">
           <h2>Repository</h2>
           <p class="sidebar-line"><span class="label">Files:</span> <span id="repo-stats">Loading...</span></p>
-          <p class="sidebar-line"><span class="label">Branch:</span> <span id="branch-name">-</span></p>
+          <label class="sidebar-label" for="branch-select">Branch</label>
+          <select id="branch-select" class="branch-select" aria-label="Select branch">
+            <option>Loading...</option>
+          </select>
+          <p class="sidebar-line"><span class="label">Selected:</span> <span id="branch-name">-</span></p>
           <p class="sidebar-line"><span class="label">Generated:</span> <span id="generated-at">-</span></p>
         </div>
       </aside>

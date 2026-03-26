@@ -209,6 +209,33 @@ button:focus-visible,
   margin-bottom: var(--spacing-md);
 }
 
+.sidebar-label {
+  display: block;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--color-text-primary);
+  margin-bottom: 0.35rem;
+}
+
+.branch-select {
+  width: 100%;
+  border: 1px solid var(--color-border);
+  padding: 0.5rem 0.75rem;
+  border-radius: var(--radius-md);
+  font-size: 0.8125rem;
+  font-family: var(--font-body);
+  background-color: var(--color-bg);
+  color: var(--color-text-primary);
+  margin-bottom: 0.65rem;
+  transition: border-color 0.15s ease, background-color 0.3s ease, color 0.3s ease;
+}
+
+.branch-select:focus {
+  outline: none;
+  border-color: var(--color-accent);
+  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.15);
+}
+
 .sidebar-line {
   font-size: 0.8125rem;
   color: var(--color-text-secondary);
