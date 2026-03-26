@@ -3,18 +3,35 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Grasshopper Template files in the repository</title>
+    <title>Urbano2 Grasshopper Template Files</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Outfit:wght@500;700&display=swap"
+      rel="stylesheet"
+    />
+    <script>
+      (function () {
+        var prefersDark = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches;
+        document.documentElement.setAttribute("data-theme", prefersDark ? "dark" : "light");
+      })();
+    </script>
     <link rel="stylesheet" href="styles.css" />
   </head>
   <body>
-    <main class="container">
-      <header class="header">
-        <h1>Grasshopper Template files in the repository</h1>
+    <header class="site-header">
+      <div class="container">
+        <h1>Urbano2 Grasshopper Template Files</h1>
         <p class="subtitle">Directory listing of all <code>*.gh</code> files with full folder structure.</p>
-      </header>
+      </div>
+    </header>
 
-      <section class="panel">
-        <div class="meta" id="meta">Loading...</div>
+    <main class="container page-content">
+      <section class="index-card" aria-label="Grasshopper file index">
+        <div class="meta-row">
+          <p class="meta" id="meta">Loading...</p>
+          <p class="theme-status" id="theme-status">Theme: auto</p>
+        </div>
         <div id="tree-root" class="tree-root" aria-live="polite"></div>
       </section>
     </main>

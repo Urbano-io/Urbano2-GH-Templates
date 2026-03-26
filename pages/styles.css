@@ -1,61 +1,126 @@
 :root {
-  --bg: #f2f4f8;
-  --panel-bg: #ffffff;
-  --text: #1f2937;
-  --muted: #5b6574;
-  --border: #d8dee7;
-  --link: #0a58ca;
-  --link-hover: #073b8a;
-  --folder: #8f5f00;
+  --color-bg: #f8fafc;
+  --color-surface: #ffffff;
+  --color-surface-soft: #f1f5f9;
+  --color-text: #0f172a;
+  --color-muted: #64748b;
+  --color-border: #dbe3ee;
+  --color-link: #2563eb;
+  --color-link-hover: #1d4ed8;
+  --color-folder: #0f172a;
+  --shadow-card: 0 12px 28px rgba(2, 6, 23, 0.08);
+  --font-heading: "Outfit", "Avenir Next", "Segoe UI", sans-serif;
+  --font-body: "Inter", "Avenir Next", "Segoe UI", sans-serif;
+}
+
+[data-theme="dark"] {
+  --color-bg: #0b1220;
+  --color-surface: #111a2b;
+  --color-surface-soft: #17233a;
+  --color-text: #e2e8f0;
+  --color-muted: #94a3b8;
+  --color-border: #243248;
+  --color-link: #7db2ff;
+  --color-link-hover: #a8cbff;
+  --color-folder: #f1f5f9;
+  --shadow-card: 0 14px 30px rgba(2, 6, 23, 0.35);
 }
 
 * {
   box-sizing: border-box;
 }
 
+html,
 body {
   margin: 0;
-  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-  background: linear-gradient(180deg, #f8f9fb 0%, #eef2f7 100%);
-  color: var(--text);
+  padding: 0;
+}
+
+body {
+  font-family: var(--font-body);
+  color: var(--color-text);
+  background:
+    radial-gradient(circle at 5% -10%, rgba(37, 99, 235, 0.16), transparent 45%),
+    radial-gradient(circle at 95% -12%, rgba(14, 165, 233, 0.14), transparent 45%),
+    var(--color-bg);
+  line-height: 1.45;
+  transition: background-color 180ms ease, color 180ms ease;
 }
 
 .container {
-  max-width: 900px;
+  width: min(960px, calc(100% - 2rem));
   margin: 0 auto;
-  padding: 32px 16px 48px;
 }
 
-.header h1 {
-  margin: 0 0 8px;
-  font-size: 1.8rem;
+.site-header {
+  border-bottom: 1px solid var(--color-border);
+  background: color-mix(in oklab, var(--color-surface) 88%, transparent);
+  backdrop-filter: blur(6px);
+}
+
+.site-header .container {
+  padding: 1.1rem 0 1rem;
+}
+
+.site-header h1 {
+  margin: 0;
+  font-family: var(--font-heading);
+  font-size: clamp(1.35rem, 2.6vw, 1.8rem);
+  letter-spacing: 0.01em;
 }
 
 .subtitle {
-  margin: 0;
-  color: var(--muted);
+  margin: 0.35rem 0 0;
+  color: var(--color-muted);
+  font-size: 0.95rem;
 }
 
-.panel {
-  margin-top: 20px;
-  background: var(--panel-bg);
-  border: 1px solid var(--border);
-  border-radius: 10px;
-  padding: 16px;
-  box-shadow: 0 8px 22px rgba(12, 19, 36, 0.06);
+.page-content {
+  padding: 1.35rem 0 2.5rem;
+}
+
+.index-card {
+  border: 1px solid var(--color-border);
+  background: var(--color-surface);
+  border-radius: 14px;
+  box-shadow: var(--shadow-card);
+  padding: 1rem 1rem 1.25rem;
+}
+
+.meta-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+  border-bottom: 1px solid var(--color-border);
+  padding-bottom: 0.75rem;
+  margin-bottom: 0.9rem;
 }
 
 .meta {
-  margin-bottom: 14px;
-  color: var(--muted);
-  font-size: 0.95rem;
+  margin: 0;
+  color: var(--color-muted);
+  font-size: 0.93rem;
+}
+
+.theme-status {
+  margin: 0;
+  color: var(--color-muted);
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  border: 1px solid var(--color-border);
+  background: var(--color-surface-soft);
+  border-radius: 999px;
+  padding: 0.2rem 0.55rem;
 }
 
 .tree,
 .tree ul {
   list-style: none;
   margin: 0;
-  padding-left: 1rem;
+  padding-left: 1.05rem;
 }
 
 .tree {
@@ -63,42 +128,52 @@ body {
 }
 
 .item {
-  margin: 4px 0;
-  line-height: 1.5;
+  margin: 0.3rem 0;
   word-break: break-word;
 }
 
+.folder-item {
+  margin-top: 0.7rem;
+}
+
 .folder-name {
-  color: var(--folder);
-  font-weight: 600;
+  color: var(--color-folder);
+  font-weight: 700;
+  font-family: var(--font-heading);
+  letter-spacing: 0.01em;
 }
 
-.file-link {
-  color: var(--link);
-  text-decoration: none;
-}
-
-.file-link:hover {
-  color: var(--link-hover);
-  text-decoration: underline;
-}
-
-.file-actions {
-  color: var(--muted);
-  font-size: 0.9rem;
+.file-name {
+  color: var(--color-text);
 }
 
 .action-link {
-  color: var(--link);
+  color: var(--color-link);
   text-decoration: none;
 }
 
 .action-link:hover {
-  color: var(--link-hover);
+  color: var(--color-link-hover);
   text-decoration: underline;
 }
 
 .error {
-  color: #9c1b1b;
+  color: #dc2626;
   font-weight: 600;
+  margin: 0.5rem 0 0;
+}
+
+@media (max-width: 640px) {
+  .container {
+    width: min(960px, calc(100% - 1rem));
+  }
+
+  .index-card {
+    border-radius: 12px;
+    padding: 0.8rem 0.75rem 1rem;
+  }
+
+  .subtitle {
+    font-size: 0.9rem;
+  }
 }
