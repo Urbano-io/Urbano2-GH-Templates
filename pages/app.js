@@ -125,16 +125,16 @@ async function loadJson(path) {
 }
 
 async function loadBranches(config) {
-  const response = await fetch(
-    githubApiUrl(`/repos/${config.owner}/${config.repo}/branches?per_page=100`),
-    { cache: "no-store" }
-  );
-  if (!response.ok) {
-    throw new Error(`Failed to load branches (${response.status})`);
+  try {
+    const branches = await loadJson("branches.json");
+    if (Array.isArray(branches) && branches.length > 0) {
+      return branches.sort(byName);
+    }
+  } catch (_error) {
+    // Fall back to the currently deployed branch if the static branch list is unavailable.
   }
 
-  const branches = await response.json();
-  return branches.map((branch) => branch.name).sort(byName);
+  return [config.branch];
 }
 
 async function loadBranchTree(config, branch) {
@@ -216,7 +216,10 @@ async function init() {
   const branchSelectEl = document.getElementById("branch-select");
 
   try {
-    const config = await loadJson("site-config.json");
+    const [localFiles, config] = await Promise.all([
+      loadJson("gh-files.json"),
+      loadJson("site-config.json"),
+    ]);
     const branches = await loadBranches(config);
     const initialBranch = branches.includes(getInitialBranch(config.branch))
       ? getInitialBranch(config.branch)
@@ -233,7 +236,10 @@ async function init() {
       if (branchEl) branchEl.textContent = branch;
       if (generatedEl) generatedEl.textContent = "Loading...";
 
-      const branchData = await loadBranchTree(config, branch);
+      const branchData =
+        branch === config.branch
+          ? { files: localFiles, generatedAt: config.generatedAt }
+          : await loadBranchTree(config, branch);
       const generated = formatDate(branchData.generatedAt);
       const branchConfig = { ...config, branch };
 
@@ -247,6 +253,7 @@ async function init() {
     }
 
     if (branchSelectEl) {
+      branchSelectEl.disabled = branches.length <= 1;
       branchSelectEl.addEventListener("change", async (event) => {
         const branch = event.target.value;
         try {

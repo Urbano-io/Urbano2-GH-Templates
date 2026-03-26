@@ -41,6 +41,12 @@ jobs:
             --arg generatedAt "$(date -u +"%Y-%m-%dT%H:%M:%SZ")" \
             '{owner:$owner, repo:$repo, branch:$branch, generatedAt:$generatedAt}' > pages/site-config.json
 
+          curl -fsSL \
+            -H "Accept: application/vnd.github+json" \
+            -H "Authorization: Bearer ${{ github.token }}" \
+            "${GITHUB_API_URL}/repos/${GITHUB_REPOSITORY}/branches?per_page=100" \
+            | jq '[.[].name] | sort' > pages/branches.json
+
           echo "Detected $(jq length pages/gh-files.json) .gh file(s)"
           touch pages/.nojekyll
 
