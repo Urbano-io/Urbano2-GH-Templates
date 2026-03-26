@@ -49,6 +49,24 @@ function applyAutoTheme() {
   }
 }
 
+function createDownloadIcon() {
+  const svgNs = "http://www.w3.org/2000/svg";
+  const svg = document.createElementNS(svgNs, "svg");
+  svg.setAttribute("viewBox", "0 0 24 24");
+  svg.setAttribute("aria-hidden", "true");
+  svg.classList.add("action-icon");
+
+  const path = document.createElementNS(svgNs, "path");
+  path.setAttribute(
+    "d",
+    "M5 20h14v-2H5v2zm7-18L5.33 8.67l1.41 1.41L11 5.83V16h2V5.83l4.26 4.25 1.41-1.41L12 2z"
+  );
+  path.setAttribute("fill", "currentColor");
+
+  svg.appendChild(path);
+  return svg;
+}
+
 function renderNode(node, listEl, config) {
   const sortedDirs = [...node.dirs.entries()].sort((a, b) => byName(a[0], b[0]));
 
@@ -84,7 +102,9 @@ function renderNode(node, listEl, config) {
     downloadLink.href = `https://raw.githubusercontent.com/${config.owner}/${config.repo}/${config.branch}/${encodePath(file.path)}`;
     downloadLink.target = "_blank";
     downloadLink.rel = "noopener noreferrer";
-    downloadLink.textContent = "download";
+    downloadLink.setAttribute("aria-label", `Download ${file.name}`);
+    downloadLink.setAttribute("title", `Download ${file.name}`);
+    downloadLink.appendChild(createDownloadIcon());
 
     fileItem.appendChild(fileName);
     fileItem.appendChild(downloadLink);

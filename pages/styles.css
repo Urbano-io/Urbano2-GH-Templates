@@ -340,15 +340,15 @@ button:focus-visible,
 }
 
 .action-link {
-  display: inline-block;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   color: var(--color-accent);
   text-decoration: none;
-  font-size: 0.75rem;
-  font-weight: 500;
-  line-height: 1.2;
   border: 1px solid var(--color-accent);
   border-radius: var(--radius-sm);
-  padding: 0.15rem 0.45rem;
+  width: 1.9rem;
+  height: 1.9rem;
   background: rgba(59, 130, 246, 0.06);
 }
 
@@ -356,6 +356,12 @@ button:focus-visible,
   color: var(--color-bg);
   text-decoration: none;
   background: var(--color-accent);
+}
+
+.action-icon {
+  width: 1rem;
+  height: 1rem;
+  display: block;
 }
 
 .error {
