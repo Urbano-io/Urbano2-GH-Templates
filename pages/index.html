@@ -19,22 +19,43 @@
     <link rel="stylesheet" href="styles.css" />
   </head>
   <body>
+    <a href="#main-content" class="skip-link">Skip to main content</a>
     <header class="site-header">
       <div class="container">
-        <h1>Urbano2 Grasshopper Template Files</h1>
-        <p class="subtitle">Directory listing of all <code>*.gh</code> files with full folder structure.</p>
+        <div class="header-left">
+          <a href="./" class="header-brand">
+            <span class="header-logo" aria-hidden="true">U2</span>
+            <h1>Urbano2 Grasshopper Template Files</h1>
+          </a>
+          <p class="subtitle">Directory listing of all <code>*.gh</code> files with full folder structure.</p>
+        </div>
+        <div class="theme-toggle" aria-live="polite">
+          <span class="icon" aria-hidden="true">◐</span>
+          <span id="theme-label">Auto</span>
+        </div>
       </div>
     </header>
 
-    <main class="container page-content">
-      <section class="index-card" aria-label="Grasshopper file index">
-        <div class="meta-row">
-          <p class="meta" id="meta">Loading...</p>
-          <p class="theme-status" id="theme-status">Theme: auto</p>
+    <div class="app-layout container">
+      <aside class="sidebar" aria-label="Repository metadata">
+        <div class="sidebar-section">
+          <h2>Repository</h2>
+          <p class="sidebar-line"><span class="label">Files:</span> <span id="repo-stats">Loading...</span></p>
+          <p class="sidebar-line"><span class="label">Branch:</span> <span id="branch-name">-</span></p>
+          <p class="sidebar-line"><span class="label">Generated:</span> <span id="generated-at">-</span></p>
         </div>
-        <div id="tree-root" class="tree-root" aria-live="polite"></div>
-      </section>
-    </main>
+      </aside>
+
+      <main id="main-content" class="main-content" tabindex="-1">
+        <section class="versions-section" aria-label="Grasshopper file index">
+          <div class="section-header">
+            <h2>Template Files</h2>
+          </div>
+          <p class="meta" id="meta">Loading...</p>
+          <div id="tree-root" class="tree-root" aria-live="polite"></div>
+        </section>
+      </main>
+    </div>
 
     <script src="app.js" defer></script>
   </body>

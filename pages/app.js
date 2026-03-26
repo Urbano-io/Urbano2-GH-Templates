@@ -30,13 +30,13 @@ function buildTree(paths) {
 }
 
 function applyAutoTheme() {
-  const statusEl = document.getElementById("theme-status");
+  const labelEl = document.getElementById("theme-label");
   const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
 
   function setTheme(isDark) {
     document.documentElement.setAttribute("data-theme", isDark ? "dark" : "light");
-    if (statusEl) {
-      statusEl.textContent = `Theme: auto (${isDark ? "dark" : "light"})`;
+    if (labelEl) {
+      labelEl.textContent = `Auto (${isDark ? "Dark" : "Light"})`;
     }
   }
 
@@ -112,6 +112,9 @@ async function init() {
 
   const metaEl = document.getElementById("meta");
   const rootEl = document.getElementById("tree-root");
+  const statsEl = document.getElementById("repo-stats");
+  const branchEl = document.getElementById("branch-name");
+  const generatedEl = document.getElementById("generated-at");
 
   try {
     const [files, config] = await Promise.all([
@@ -119,7 +122,12 @@ async function init() {
       loadJson("site-config.json"),
     ]);
 
-    metaEl.textContent = `${files.length} .gh file(s) found | Branch: ${config.branch} | Generated: ${formatDate(config.generatedAt)}`;
+    const generated = formatDate(config.generatedAt);
+    metaEl.textContent = `${files.length} .gh file(s) found | Branch: ${config.branch} | Generated: ${generated}`;
+
+    if (statsEl) statsEl.textContent = `${files.length} .gh file(s)`;
+    if (branchEl) branchEl.textContent = config.branch || "-";
+    if (generatedEl) generatedEl.textContent = generated;
 
     if (files.length === 0) {
       rootEl.textContent = "No .gh files were found in this repository.";
@@ -133,6 +141,9 @@ async function init() {
     rootEl.appendChild(list);
   } catch (error) {
     metaEl.textContent = "Could not load file index.";
+    if (statsEl) statsEl.textContent = "Unavailable";
+    if (branchEl) branchEl.textContent = "Unavailable";
+    if (generatedEl) generatedEl.textContent = "Unavailable";
     const err = document.createElement("p");
     err.className = "error";
     err.textContent = error.message;
