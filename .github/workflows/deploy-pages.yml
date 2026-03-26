@@ -28,10 +28,11 @@ jobs:
 
           mkdir -p pages
 
-          git ls-tree -r --name-only HEAD \
-            | awk 'tolower($0) ~ /\.gh$/' \
-            | LC_ALL=C sort \
-            | jq -R -s 'split("\\n")[:-1]' > pages/gh-files.json
+          curl -fsSL \
+            -H "Accept: application/vnd.github+json" \
+            -H "Authorization: Bearer ${{ github.token }}" \
+            "${GITHUB_API_URL}/repos/${GITHUB_REPOSITORY}/git/trees/${GITHUB_SHA}?recursive=1" \
+            | jq '[.tree[].path | select(test("\\.gh$"; "i"))] | sort' > pages/gh-files.json
 
           jq -n \
             --arg owner "${GITHUB_REPOSITORY_OWNER}" \
