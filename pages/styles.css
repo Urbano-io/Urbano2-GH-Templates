@@ -340,15 +340,22 @@ button:focus-visible,
 }
 
 .action-link {
-  color: var(--color-text-secondary);
+  display: inline-block;
+  color: var(--color-accent);
   text-decoration: none;
   font-size: 0.75rem;
   font-weight: 500;
+  line-height: 1.2;
+  border: 1px solid var(--color-accent);
+  border-radius: var(--radius-sm);
+  padding: 0.15rem 0.45rem;
+  background: rgba(59, 130, 246, 0.06);
 }
 
 .action-link:hover {
-  color: var(--color-accent);
-  text-decoration: underline;
+  color: var(--color-bg);
+  text-decoration: none;
+  background: var(--color-accent);
 }
 
 .error {
