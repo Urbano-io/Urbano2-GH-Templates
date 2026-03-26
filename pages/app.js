@@ -84,7 +84,7 @@ function renderNode(node, listEl, config) {
     downloadLink.href = `https://raw.githubusercontent.com/${config.owner}/${config.repo}/${config.branch}/${encodePath(file.path)}`;
     downloadLink.target = "_blank";
     downloadLink.rel = "noopener noreferrer";
-    downloadLink.textContent = "(download)";
+    downloadLink.textContent = "download";
 
     fileItem.appendChild(fileName);
     fileItem.appendChild(downloadLink);
