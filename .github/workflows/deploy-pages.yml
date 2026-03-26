@@ -28,8 +28,8 @@ jobs:
 
           mkdir -p pages
 
-          find . -type f -name '*.gh' -not -path './.git/*' \
-            | sed 's|^./||' \
+          git ls-tree -r --name-only HEAD \
+            | awk 'tolower($0) ~ /\.gh$/' \
             | LC_ALL=C sort \
             | jq -R -s 'split("\\n")[:-1]' > pages/gh-files.json
 
@@ -40,6 +40,7 @@ jobs:
             --arg generatedAt "$(date -u +"%Y-%m-%dT%H:%M:%SZ")" \
             '{owner:$owner, repo:$repo, branch:$branch, generatedAt:$generatedAt}' > pages/site-config.json
 
+          echo "Detected $(jq length pages/gh-files.json) .gh file(s)"
           touch pages/.nojekyll
 
       - name: Setup Pages
