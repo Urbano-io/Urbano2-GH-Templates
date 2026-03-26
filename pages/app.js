@@ -96,7 +96,9 @@ function formatDate(value) {
   if (!value) return "unknown";
   const date = new Date(value);
   if (Number.isNaN(date.valueOf())) return value;
-  return date.toLocaleString([], { dateStyle: "short", timeStyle: "short" });
+  const datePart = date.toLocaleDateString();
+  const timePart = date.toLocaleTimeString([], { hour: "numeric", minute: "2-digit" });
+  return `${datePart}, ${timePart}`;
 }
 
 async function loadJson(path) {
